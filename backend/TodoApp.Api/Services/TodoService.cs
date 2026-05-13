@@ -1,4 +1,4 @@
-using TodoApp.Api.Models;
+﻿using TodoApp.Api.Models;
 
 namespace TodoApp.Api.Services;
 
@@ -20,31 +20,33 @@ public class TodoService : ITodoService
 
     public TodoItem Add(string title)
     {
+        if (string.IsNullOrWhiteSpace(title))
+            throw new ArgumentException("Title cannot be empty.", nameof(title));
         var item = new TodoItem(Guid.NewGuid(), title.Trim(), false, DateTimeOffset.UtcNow);
         lock (_lock)
             _todos.Add(item);
         return item;
     }
 
-    public bool Toggle(Guid id)
+    public Result Toggle(Guid id)
     {
         lock (_lock)
         {
             var index = _todos.FindIndex(t => t.Id == id);
-            if (index < 0) return false;
+            if (index < 0) return Result.Fail("Todo not found.");
             _todos[index] = _todos[index] with { Completed = !_todos[index].Completed };
-            return true;
+            return Result.Ok();
         }
     }
 
-    public bool Delete(Guid id)
+    public Result Delete(Guid id)
     {
         lock (_lock)
         {
             var item = _todos.FirstOrDefault(t => t.Id == id);
-            if (item is null) return false;
+            if (item is null) return Result.Fail("Todo not found.");
             _todos.Remove(item);
-            return true;
+            return Result.Ok();
         }
     }
 }

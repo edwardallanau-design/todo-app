@@ -1,4 +1,4 @@
-using TodoApp.Api.Models;
+﻿using TodoApp.Api.Models;
 
 namespace TodoApp.Api.Services;
 
@@ -6,6 +6,6 @@ public interface ITodoService
 {
     IEnumerable<TodoItem> GetAll();
     TodoItem Add(string title);
-    bool Toggle(Guid id);
-    bool Delete(Guid id);
+    Result Toggle(Guid id);
+    Result Delete(Guid id);
 }

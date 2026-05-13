@@ -1,3 +1,4 @@
+﻿using TodoApp.Api.Models;
 using TodoApp.Api.Services;
 
 namespace TodoApp.Api.Tests;
@@ -17,7 +18,8 @@ public class TodoServiceTests
     public void GetAll_ReturnsNewestFirst()
     {
         var items = _sut.GetAll().ToList();
-        Assert.True(items[0].CreatedAt >= items[1].CreatedAt);
+        Assert.True(items[0].CreatedAt > items[1].CreatedAt);
+        Assert.True(items[1].CreatedAt > items[2].CreatedAt);
     }
 
     [Fact]
@@ -42,14 +44,16 @@ public class TodoServiceTests
     {
         var item = _sut.Add("Toggle me");
         var result = _sut.Toggle(item.Id);
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
         Assert.True(_sut.GetAll().First(t => t.Id == item.Id).Completed);
     }
 
     [Fact]
-    public void Toggle_UnknownId_ReturnsFalse()
+    public void Toggle_UnknownId_ReturnsFails()
     {
-        Assert.False(_sut.Toggle(Guid.NewGuid()));
+        var result = _sut.Toggle(Guid.NewGuid());
+        Assert.False(result.IsSuccess);
+        Assert.NotNull(result.Error);
     }
 
     [Fact]
@@ -58,13 +62,15 @@ public class TodoServiceTests
         var item = _sut.Add("Delete me");
         var before = _sut.GetAll().Count();
         var result = _sut.Delete(item.Id);
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
         Assert.Equal(before - 1, _sut.GetAll().Count());
     }
 
     [Fact]
-    public void Delete_UnknownId_ReturnsFalse()
+    public void Delete_UnknownId_ReturnsFails()
     {
-        Assert.False(_sut.Delete(Guid.NewGuid()));
+        var result = _sut.Delete(Guid.NewGuid());
+        Assert.False(result.IsSuccess);
+        Assert.NotNull(result.Error);
     }
 }
