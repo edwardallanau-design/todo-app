@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+﻿import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { TodoService } from './todo.service';
@@ -57,5 +57,21 @@ describe('TodoService', () => {
     expect(req.request.method).toBe('DELETE');
     req.flush(null, { status: 204, statusText: 'No Content' });
     expect(service.todos()).toEqual([]);
+  });
+
+  it('load() sets status to loading then idle on success', () => {
+    service.load();
+    expect(service.status()).toBe('loading');
+    const req = httpMock.expectOne(apiUrl);
+    req.flush([mockItem]);
+    expect(service.status()).toBe('idle');
+  });
+
+  it('load() sets status to error and message on HTTP failure', () => {
+    service.load();
+    const req = httpMock.expectOne(apiUrl);
+    req.flush('Server error', { status: 500, statusText: 'Server Error' });
+    expect(service.status()).toBe('error');
+    expect(service.error()).toBe('Failed to load todos.');
   });
 });

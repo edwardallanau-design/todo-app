@@ -1,5 +1,20 @@
-.container {
+﻿.container {
   max-width: 600px;
   margin: 2rem auto;
   padding: 0 1rem;
+}
+
+.status-message {
+  padding: 1rem;
+  border-radius: 4px;
+  text-align: center;
+
+  &.loading {
+    color: rgba(0, 0, 0, 0.54);
+  }
+
+  &.error {
+    color: #c62828;
+    background: #ffebee;
+  }
 }

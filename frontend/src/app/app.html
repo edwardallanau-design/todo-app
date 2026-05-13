@@ -1,8 +1,14 @@
-<mat-toolbar color="primary">
+﻿<mat-toolbar color="primary">
   <span>Todo List</span>
 </mat-toolbar>
 
 <main class="container">
   <app-add-todo />
-  <app-todo-list />
+  @if (todoService.status() === 'loading') {
+    <p class="status-message loading">Loading todos…</p>
+  } @else if (todoService.status() === 'error') {
+    <p class="status-message error">{{ todoService.error() }}</p>
+  } @else {
+    <app-todo-list />
+  }
 </main>

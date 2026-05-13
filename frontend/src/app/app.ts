@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+﻿import { Component, inject, OnInit } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TodoService } from './core/services/todo.service';
 import { AddTodo } from './features/todos/add-todo/add-todo';
@@ -11,7 +11,7 @@ import { TodoList } from './features/todos/todo-list/todo-list';
   styleUrl: './app.scss',
 })
 export class App implements OnInit {
-  private readonly todoService = inject(TodoService);
+  protected readonly todoService = inject(TodoService);
 
   ngOnInit(): void {
     this.todoService.load();
