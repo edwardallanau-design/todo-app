@@ -1,0 +1,30 @@
+<mat-card>
+  <mat-card-content>
+    @if (todoService.todos().length === 0) {
+      <p class="empty-state">No todos yet. Add one above!</p>
+    } @else {
+      @for (todo of todoService.todos(); track todo.id; let last = $last) {
+        <div class="todo-row">
+          <mat-checkbox
+            [checked]="todo.completed"
+            (change)="todoService.toggle(todo.id)"
+            [aria-label]="'Toggle ' + todo.title"
+          >
+            <span [class.completed]="todo.completed">{{ todo.title }}</span>
+          </mat-checkbox>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="todoService.delete(todo.id)"
+            [attr.aria-label]="'Delete ' + todo.title"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        @if (!last) {
+          <mat-divider />
+        }
+      }
+    }
+  </mat-card-content>
+</mat-card>
