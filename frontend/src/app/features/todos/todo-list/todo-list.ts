@@ -1,16 +1,17 @@
-import { Component, inject } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
+﻿import { Component, inject } from '@angular/core';
 import { TodoService } from '../../../core/services/todo.service';
+import { TodoItems } from './todo-items/todo-items';
 
 @Component({
   selector: 'app-todo-list',
-  imports: [MatCardModule, MatCheckboxModule, MatIconModule, MatButtonModule, MatDividerModule],
-  templateUrl: './todo-list.html',
-  styleUrl: './todo-list.scss',
+  imports: [TodoItems],
+  template: `
+    <app-todo-items
+      [todos]="todoService.todos()"
+      (toggle)="todoService.toggle($event)"
+      (delete)="todoService.delete($event)"
+    />
+  `,
 })
 export class TodoList {
   protected readonly todoService = inject(TodoService);
