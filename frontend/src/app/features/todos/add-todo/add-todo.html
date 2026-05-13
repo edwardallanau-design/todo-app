@@ -1,0 +1,20 @@
+<mat-form-field appearance="outline" class="full-width">
+  <mat-label>New todo</mat-label>
+  <input
+    matInput
+    [formControl]="titleControl"
+    placeholder="What needs to be done?"
+    (keyup.enter)="submit()"
+    data-testid="todo-input"
+  />
+  <button
+    matSuffix
+    mat-icon-button
+    color="primary"
+    [disabled]="titleControl.invalid"
+    (click)="submit()"
+    aria-label="Add todo"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+</mat-form-field>
